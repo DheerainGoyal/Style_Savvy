@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StyleSavvy — Onboarding</title>
+    <link rel="stylesheet" href="onboarding.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <div class="page">
+        <p class="eyebrow" style="margin-bottom: 12px" id="step-eyebrow">Onboarding — Step 01</p>
+        <h1 class="display">Define Your <em>Canvas.</em></h1>
+        <p class="intro">
+          Share your physical metrics so our AI can build a style profile tailored entirely to you and your choices.
+        </p>
+
+        <div class="grid-2">
+          <!-- profile form (2 steps) -->
+          <form class="panel" id="profile-form" novalidate>
+            <ol class="stepper" id="stepper">
+              <li class="on" data-goto="1"><span>1</span> Metrics</li>
+              <li data-goto="2"><span>2</span> Style</li>
+              <li data-goto="3"><span>3</span> Reveal</li>
+            </ol>
+
+            <!-- step 1: metrics -->
+            <fieldset class="step" data-step="1">
+              <legend class="eyebrow" style="margin-bottom: 24px">Physical Metrics</legend>
+
+              <div class="f-row">
+                <label class="f-label" for="display-name">What should we call you?</label>
+                <input class="f-input" id="display-name" name="displayName" type="text" maxlength="30" placeholder="e.g. Ava" autocomplete="given-name" />
+                <p class="f-error" data-err="displayName"></p>
+              </div>
+
+              <div class="field">
+                <div class="head"><label class="lbl" for="height">Height</label><span class="val" id="height-val">5'7"</span></div>
+                <input type="range" min="58" max="78" value="67" id="height" name="height" />
+                <div class="ends"><span>4'10"</span><span>6'6"</span></div>
+              </div>
+
+              <div class="field">
+                <div class="head">
+                  <span class="lbl"><label for="weight">Weight</label> <label class="opt"><input type="checkbox" name="shareWeight" checked /> include in profile</label></span>
+                  <span class="val" id="weight-val">132 lb</span>
+                </div>
+                <input type="range" min="90" max="260" value="132" id="weight" name="weight" />
+                <div class="ends"><span>90 lb</span><span>260 lb</span></div>
+              </div>
+
+              <div class="field f-row">
+                <p class="lbl" style="margin-bottom: 12px">Body Shape</p>
+                <div class="shapes" id="shapes" role="radiogroup" aria-label="Body shape"></div>
+                <p class="f-error" data-err="shape"></p>
+              </div>
+
+              <div class="field f-row">
+                <p class="lbl" style="margin-bottom: 12px">Skin Tone</p>
+                <div class="skinbar"></div>
+                <div class="skins" id="skins" role="radiogroup" aria-label="Skin tone"></div>
+                <p class="f-error" data-err="skin"></p>
+              </div>
+
+              <div class="foot-actions">
+                <a class="btn btn-outline" href="index.html">BACK</a>
+                <button type="button" class="btn btn-dark" style="flex: 1" data-next>CONTINUE TO STYLE <span class="arrow">→</span></button>
+              </div>
+            </fieldset>
+
+            <!-- step 2: style quiz + preferences -->
+            <fieldset class="step" data-step="2" hidden>
+              <legend class="eyebrow" style="margin-bottom: 24px">Quick Style Quiz</legend>
+
+              <div class="f-row">
+                <p style="font-size: 16px; font-weight: 500; margin-bottom: 4px">Which aesthetics resonate with you?</p>
+                <p style="font-size: 14px; color: var(--muted)">Pick 1 to 3. <span id="pick-count">0 / 3 selected</span></p>
+                <div class="chips" id="quiz"></div>
+                <p class="f-error" data-err="picks"></p>
+              </div>
+
+              <div class="f-row">
+                <p class="f-label">Where do you usually dress for?</p>
+                <div class="chips" id="occasions"></div>
+                <p class="f-error" data-err="occasions"></p>
+              </div>
+
+              <div class="two">
+                <div class="f-row">
+                  <label class="f-label" for="city">Home city <span class="f-hint" style="display: inline">(for weather)</span></label>
+                  <input class="f-input" id="city" name="city" type="text" placeholder="New York City" maxlength="40" autocomplete="address-level2" />
+                  <p class="f-error" data-err="city"></p>
+                </div>
+                <div class="f-row">
+                  <label class="f-label" for="budget">Typical budget per piece</label>
+                  <select class="f-input" id="budget" name="budget">
+                    <option value="">Choose…</option>
+                    <option>Under $50</option>
+                    <option>$50 – $150</option>
+                    <option>$150 – $400</option>
+                    <option>$400+</option>
+                  </select>
+                  <p class="f-error" data-err="budget"></p>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <label class="f-label" for="goals">Anything your stylist should know? <span class="f-count" id="goals-count">0 / 160</span></label>
+                <textarea class="f-input" id="goals" name="goals" maxlength="160" placeholder="e.g. I want to look polished for client meetings but stay comfortable."></textarea>
+                <p class="f-error" data-err="goals"></p>
+              </div>
+
+              <p class="form-msg" data-msg role="alert"></p>
+              <div class="foot-actions">
+                <button type="button" class="btn btn-outline" data-prev>BACK</button>
+                <button type="submit" class="btn btn-dark" style="flex: 1">REVEAL MY STYLE TWIN <span class="arrow">→</span></button>
+              </div>
+            </fieldset>
+
+            <!-- step 3: saved confirmation -->
+            <div class="step done" data-step="3" hidden>
+              <span class="done-ic">✓</span>
+              <p class="serif" style="font-size: 30px; line-height: 1.1">Profile saved, <em id="done-name">friend.</em></p>
+              <p style="font-size: 14px; color: var(--muted); margin-top: 8px" id="done-summary"></p>
+              <div class="foot-actions">
+                <button type="button" class="btn btn-outline" data-goto-step="1">EDIT ANSWERS</button>
+                <a class="btn btn-dark" style="flex: 1; text-align: center" href="wardrobe.html">OPEN MY WARDROBE <span class="arrow">→</span></a>
+              </div>
+            </div>
+          </form>
+
+          <!-- result -->
+          <div>
+            <p class="eyebrow" style="margin-bottom: 16px">Your Style Result</p>
+            <div class="result">
+              <div class="img">
+                <img
+                  src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=900&h=800&fit=crop&auto=format"
+                  alt="Style twin — elegant minimalist look"
+                />
+                <div class="grad"></div>
+                <div class="match" id="res-badge">● LIVE PREVIEW</div>
+                <div class="score"><b><span id="res-score">94</span><sup>%</sup></b><small>Compatibility Score</small></div>
+              </div>
+              <div class="body">
+                <p class="arch" id="res-arch">Style Archetype — Elegant Minimalist</p>
+                <p class="name serif" id="res-twin">Zendaya</p>
+                <p id="res-desc">
+                  Based on your metrics and aesthetic selections, your style archetype closely mirrors Zendaya's
+                  iconic elevated minimalism — clean lines, tailored silhouettes, and bold statement pieces.
+                </p>
+                <div class="bars" id="bars"></div>
+                <p style="margin-top: 24px; font-size: 14px; color: rgba(255, 255, 255, 0.8)" id="res-cta">
+                  Your match updates as you answer. Submit the quiz to save it.
+                </p>
+                <a class="btn btn-gold" style="display: block; text-align: center; margin-top: 12px" href="wardrobe.html">
+                  BUILD MY WARDROBE <span class="arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="foot">
+          <a class="serif" href="index.html" style="font-size: 20px">StyleSavvy</a>
+          <span class="eyebrow" id="step-foot">Step 1 of 3</span>
+        </footer>
+      </div>
+      <div class="databar">
+        <span><span class="dot"></span>Style profile saved locally as JSON · <b id="data-count">0</b> records</span>
+        <span class="actions">
+          <button type="button" id="export-json">Export JSON</button>
+          <label>Import JSON<input type="file" id="import-json" accept=".json,application/json" hidden /></label>
+        </span>
+      </div>
+    </div>
+    <script type="module" src="onboarding.js"></script>
+  </body>
+</html>

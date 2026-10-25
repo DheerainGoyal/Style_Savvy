@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StyleSavvy — Landing</title>
+    <link rel="stylesheet" href="index.css" />
+    <!-- figma:head-end -->
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <div class="shell">
+      <div class="landing">
+        <!-- left: brand -->
+        <div class="left">
+          <div class="row">
+            <span class="serif" style="font-size: 24px">StyleSavvy</span>
+            <span class="eyebrow">AI Wardrobe Assistant</span>
+          </div>
+
+          <div class="hero">
+            <p class="eyebrow" style="margin-bottom: 24px">Your personal stylist, reimagined</p>
+            <h1 class="display">Dress like your <em id="rotating">style twin.</em></h1>
+            <p class="lead">
+              Build a digital wardrobe, try looks on your own avatar, and get editorial-grade styling notes tuned to
+              your body, your palette, and the weather outside.
+            </p>
+            <div class="cta">
+              <a class="btn btn-dark" href="onboarding.html" data-auth="signup" data-next="onboarding.html">BUILD MY WARDROBE <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="wardrobe.html">Explore the closet</a>
+            </div>
+            <p class="signin" id="signin-line">
+              Already have an account? <a href="#signin" data-auth="signin">Sign in</a>
+            </p>
+          </div>
+
+          <div>
+            <div class="stats">
+              <span><b>94%</b> match accuracy</span>
+              <span><b>12k</b> curated looks</span>
+            </div>
+            <div class="databar">
+              <span><span class="dot"></span>Accounts saved locally as JSON · <b id="data-count">0</b> records</span>
+              <span class="actions">
+                <button type="button" id="export-json">Export JSON</button>
+                <label>Import JSON<input type="file" id="import-json" accept=".json,application/json" hidden /></label>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- right: visual -->
+        <div class="visual">
+          <img
+            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=1600&fit=crop&auto=format"
+            alt="Model in an elegant minimalist look — white blouse and tailored trousers"
+          />
+          <div class="overlay"></div>
+          <div class="badge">● AI RENDERING ACTIVE</div>
+          <div class="caption">
+            <p class="eyebrow" style="color: rgba(255, 255, 255, 0.6); margin-bottom: 4px">Style archetype</p>
+            <p class="arch">Elegant Minimalist</p>
+            <small>Clean lines · tailored silhouettes · warm neutrals</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- auth dialog: sign in / create account / account views -->
+    <dialog class="modal" id="auth-modal" aria-label="Your StyleSavvy account">
+      <button type="button" class="modal-x" data-close aria-label="Close">✕</button>
+
+      <div class="tabs" role="tablist" id="auth-tabs">
+        <button type="button" role="tab" data-tab="signin">Sign In</button>
+        <button type="button" role="tab" data-tab="signup">Create Account</button>
+      </div>
+
+      <!-- sign in -->
+      <form id="signin-form" data-view="signin" novalidate>
+        <p class="eyebrow">Welcome back</p>
+        <h2 class="modal-title">Sign in to your <em>closet.</em></h2>
+        <div class="f-row">
+          <label class="f-label" for="si-email">Email</label>
+          <input class="f-input" id="si-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+          <p class="f-error" data-err="email"></p>
+        </div>
+        <div class="f-row">
+          <label class="f-label" for="si-password">Password</label>
+          <div class="pw">
+            <input class="f-input" id="si-password" name="password" type="password" autocomplete="current-password" placeholder="Your password" />
+            <button type="button" class="pw-toggle" data-pw>Show</button>
+          </div>
+          <p class="f-error" data-err="password"></p>
+        </div>
+        <p class="form-msg" data-msg role="alert"></p>
+        <button class="btn btn-dark btn-block" type="submit">SIGN IN <span class="arrow">→</span></button>
+        <p class="switch">New to StyleSavvy? <button type="button" data-tab="signup">Create an account</button></p>
+      </form>
+
+      <!-- create account -->
+      <form id="signup-form" data-view="signup" novalidate hidden>
+        <p class="eyebrow">Step 00 — Join</p>
+        <h2 class="modal-title">Create your <em>account.</em></h2>
+        <div class="f-row">
+          <label class="f-label" for="su-name">Full name</label>
+          <input class="f-input" id="su-name" name="name" type="text" autocomplete="name" placeholder="Ava Laurent" maxlength="40" />
+          <p class="f-error" data-err="name"></p>
+        </div>
+        <div class="f-row">
+          <label class="f-label" for="su-email">Email</label>
+          <input class="f-input" id="su-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+          <p class="f-error" data-err="email"></p>
+        </div>
+        <div class="f-row">
+          <label class="f-label" for="su-password">Password</label>
+          <div class="pw">
+            <input class="f-input" id="su-password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+            <button type="button" class="pw-toggle" data-pw>Show</button>
+          </div>
+          <div class="strength" id="strength"><span></span><span></span><span></span><span></span></div>
+          <p class="f-hint" id="strength-label">Use 8+ characters with a letter and a number.</p>
+          <p class="f-error" data-err="password"></p>
+        </div>
+        <div class="f-row">
+          <label class="f-label" for="su-confirm">Confirm password</label>
+          <input class="f-input" id="su-confirm" name="confirm" type="password" autocomplete="new-password" placeholder="Repeat password" />
+          <p class="f-error" data-err="confirm"></p>
+        </div>
+        <div class="f-row">
+          <label class="check"><input type="checkbox" name="terms" /> I agree to the Terms and Privacy Policy</label>
+          <p class="f-error" data-err="terms"></p>
+        </div>
+        <p class="form-msg" data-msg role="alert"></p>
+        <button class="btn btn-dark btn-block" type="submit">CREATE ACCOUNT <span class="arrow">→</span></button>
+        <p class="switch">Already a member? <button type="button" data-tab="signin">Sign in</button></p>
+      </form>
+
+      <!-- account (signed in) -->
+      <div data-view="account" hidden>
+        <p class="eyebrow">Your account</p>
+        <div class="acct">
+          <span class="acct-avatar" id="acct-initial">A</span>
+          <div>
+            <p class="modal-title" id="acct-name" style="margin: 0">Ava</p>
+            <small id="acct-meta"></small>
+          </div>
+        </div>
+        <form id="account-form" novalidate>
+          <div class="f-row">
+            <label class="f-label" for="ac-name">Display name</label>
+            <input class="f-input" id="ac-name" name="name" type="text" maxlength="40" />
+            <p class="f-error" data-err="name"></p>
+          </div>
+          <button class="btn btn-outline btn-block" type="submit">SAVE CHANGES</button>
+        </form>
+        <div class="acct-links">
+          <a class="btn btn-dark" href="wardrobe.html">GO TO MY WARDROBE <span class="arrow">→</span></a>
+          <a class="btn btn-outline" href="onboarding.html">Edit style profile</a>
+        </div>
+        <div class="acct-foot">
+          <button type="button" class="link" id="sign-out">Sign out</button>
+          <button type="button" class="link danger" id="delete-account">Delete account</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="index.js"></script>
+    <!-- figma:body-end -->
+  </body>
+</html>
