@@ -25,7 +25,7 @@ button { font-family: var(--sans); cursor: pointer; }
 .btn { display: inline-block; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; letter-spacing: 0.03em; transition: transform 0.15s, background 0.15s, border-color 0.15s; }
 .btn .arrow { margin-left: 6px; display: inline-block; transition: transform 0.15s; }
 .btn:hover .arrow { transform: translateX(3px); }
-.btn-dark { background: var(--ink); color: #fff; }
+.btn-dark { background: var(--ink); color: white; }
 .btn-dark:hover { transform: translateY(-2px); }
 .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--ink); }
 .btn-outline:hover { border-color: var(--ink); }
@@ -63,7 +63,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .foot-actions { display: flex; gap: 12px; margin-top: 32px; }
 
-.result { overflow: hidden; border-radius: 16px; background: var(--ink); color: #fff; }
+.result { overflow: hidden; border-radius: 16px; background: var(--ink); color: white; }
 .result .img { position: relative; }
 .result .img img { width: 100%; height: 320px; object-fit: cover; }
 .result .img .grad { position: absolute; inset: 0; background: linear-gradient(to top, var(--ink), rgba(41,37,36,0.1) 60%, transparent); }
