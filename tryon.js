@@ -276,6 +276,13 @@ wearingEl.addEventListener('click', (e) => {
     renderAll()
   }
 })
+document.getElementById('clear-all')?.addEventListener('click', () => {
+  if (looks.length > 0 && confirm('Are you sure you want to delete all saved looks?')) {
+    looks = [];
+    saveLooks();
+    toast('Lookbook cleared');
+  }
+});
 
 /* ---------- accessory ---------- */
 const accBtn = document.getElementById('add-accessory')
@@ -326,8 +333,12 @@ const lookRules = {
   notes: (f) => (val(f, 'notes').length > 200 ? 'Keep notes under 200 characters.' : ''),
 }
 liveValidate(form, lookRules)
-form.elements.notes.addEventListener('input', (e) => (document.getElementById('lk-count').textContent = `${e.target.value.length} / 200`))
-
+form.elements.notes.addEventListener('input', (e) => {
+  const len = e.target.value.length;
+  const countEl = document.getElementById('lk-count');
+  countEl.textContent = `${len} / 200`;
+  countEl.style.color = len > 180 ? '#b4472f' : 'var(--muted)';
+});
 const snapshot = (it) => ({ id: it.id, name: it.name, cat: it.cat, kind: it.kind, color: it.color })
 form.addEventListener('submit', (e) => {
   e.preventDefault()
