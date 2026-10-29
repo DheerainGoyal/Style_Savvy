@@ -90,11 +90,6 @@ const garment = (kind, color, bg = tint(color), imageSrc = '') => {
             </svg>
           </div>`;
 };
-<div class="garment g" style="background:${bg}">
-    <svg viewBox="0 0 100 88" fill="${color}">
-      <path d="${SHAPE_PATHS[kind] || SHAPE_PATHS.top}"/>
-    </svg>
-  </div>`;
 
 /* --- Initial Closet Data Seed --- */
 const FILTERS = ['All', 'Favourites', 'Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Formal', 'Footwear'];
