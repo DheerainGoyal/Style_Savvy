@@ -5,118 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StyleSavvy — Wardrobe</title>
     <link rel="stylesheet" href="wardrobe.css" />
-    
-    <!-- CSS Styles for Square Clothing Article Cards -->
     <style>
+      /* Responsive Clothing Grid */
       .clothing-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 20px;
-        margin-top: 24px;
-        margin-bottom: 24px;
+        margin-top: 20px;
       }
 
+      /* Card Container */
       .clothing-card {
-        background-color: #ffffff;
         border: 1px solid #e2e2e2;
         border-radius: 12px;
         overflow: hidden;
+        background: #ffffff;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
       .clothing-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
 
+      /* Square Image Frame */
       .image-box {
         width: 100%;
-        aspect-ratio: 1 / 1; /* Makes the image box a perfect square */
-        background-color: #f9f9f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        aspect-ratio: 1 / 1;
         overflow: hidden;
-        border-bottom: 1px solid #f0f0f0;
+        background-color: #f7f7f7;
       }
 
       .image-box img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Fits image properly into the square frame */
+        object-fit: cover;
+        display: block;
       }
 
+      /* Card Information Label */
       .item-info {
-        padding: 12px 16px;
+        padding: 12px;
       }
 
       .item-info h3 {
-        font-size: 15px;
-        font-weight: 600;
         margin: 0 0 4px 0;
+        font-size: 0.95rem;
+        font-weight: 600;
         color: #1a1a1a;
       }
 
       .item-info p {
-        font-size: 12px;
-        color: #707070;
         margin: 0;
+        font-size: 0.8rem;
+        color: #666666;
       }
     </style>
   </head>
   <body>
     <div class="shell">
-      <!-- Header Navigation -->
+      <!-- Top Navigation Bar -->
       <header class="topbar">
-        <div class="left">
-          <a class="brand" href="index.html">StyleSavvy</a>
-          <nav class="nav">
-            <a href="wardrobe.html" class="on">Wardrobe</a>
-            <a href="tryon.html">Try-On</a>
-            <a href="notes.html">Lookbook</a>
-            <a href="index.html">Discover</a>
-          </nav>
-        </div>
-        <div class="right">
-          <span class="icon-btn" title="Notifications">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
+        <a class="brand" href="index.html">StyleSavvy</a>
+        <nav class="nav">
+          <a class="active" href="wardrobe.html">Wardrobe</a>
+          <a href="tryon.html">Try-On</a>
+          <a href="notes.html">Lookbook</a>
+          <a href="index.html">Discover</a>
+        </nav>
+        <div class="user-actions">
+          <button class="icon-btn" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
-          </span>
-          <a class="avatar" id="user-avatar" href="index.html#signin" title="Sign in">?</a>
+          </button>
+          <a class="avatar" href="#" aria-label="Profile">?</a>
         </div>
       </header>
 
       <div class="wardrobe">
-        <!-- Sidebar -->
+        <!-- Sidebar Widget -->
         <aside class="sidebar">
-          <!-- Weather Widget -->
           <div class="mini">
-            <div class="weather">
-              <div class="weather-col">
-                <span class="weather-icon">☀</span>
-                <div>
-                  <p class="temp">72°F</p>
-                  <small id="city">New York City, NY</small>
-                </div>
-              </div>
-              <div class="weather-col right">
-                <small id="today">Tuesday, Sept 9</small>
-                <p class="weather-desc">Clear &amp; Sunny</p>
-              </div>
-            </div>
-            <span class="tag" id="style-tag">STYLE: POLISHED CASUAL</span>
-          </div>
-
-          <!-- AI Curated Look Card -->
-          <div class="mini">
-            <p class="eyebrow">AI Curated — Today</p>
+            <p class="eyebrow">AI Curated - Today</p>
             <p class="serif look-title">Today's <em>Recommended Look.</em></p>
             <div class="look-hero" id="look-hero"></div>
             <div class="look-pair" id="look-pair"></div>
-            <div class="look-notes">
-              <span>● Weather-appropriate</span>
-              <span id="look-match">● Matches 94% twin</span>
+            <div class="look-meta">
+              <span>Weather-appropriate</span>
+              <span id="look-match">Matches 94% twin</span>
             </div>
             <div class="look-actions">
               <button type="button" class="mini-btn outline" id="regenerate">✦ REGENERATE</button>
@@ -125,29 +103,36 @@
           </div>
         </aside>
 
-        <!-- Main Closet Section -->
+        <!-- Main Digital Closet Section -->
         <section class="closet">
           <div class="head">
             <h1 class="display">Your Digital <em>Closet.</em></h1>
-            <span class="piece-count" id="count"></span>
-          </div>
-
-          <div class="filters">
-            <div class="set" id="filters"></div>
             <div class="tools">
               <input class="search" id="search" type="search" placeholder="Search closet…" aria-label="Search closet" />
-              <button type="button" class="pill add" id="add-item">+ Add Item</button>
+              <button class="btn primary" id="add-item-btn" type="button">+ Add Item</button>
             </div>
           </div>
-<!-- Curated Aesthetic Clothing Grid -->
+
+          <!-- Complete Digital Closet Grid -->
           <div class="clothing-grid">
             
-            
+            <!-- --- WOMEN'S / NEUTRAL COLLECTION --- -->
+
+            <!-- 1. Cropped Beige Coat -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/coat.jpg" alt="Cropped Beige Coat" />
+              </div>
+              <div class="item-info">
+                <h3>Cropped Beige Coat</h3>
+                <p>Outerwear • Tailored</p>
+              </div>
+            </div>
 
             <!-- 2. Sage Green Asymmetrical Top -->
             <div class="clothing-card">
               <div class="image-box">
-                <img src="images/Sage Green Ribbed Asymmetrical Top.jpg" alt="Sage Green Ribbed Top" />
+                <img src="images/Sage Green Ribbed Asymmetrical Top.jpg" alt="Sage Green Top" />
               </div>
               <div class="item-info">
                 <h3>Sage Green Top</h3>
@@ -155,29 +140,27 @@
               </div>
             </div>
 
-           
-
             <!-- 3. Casual Shirt -->
             <div class="clothing-card">
               <div class="image-box">
-                <img src="images/casual shirt.jpg" alt="Casual Shirt" />
+                <img src="images/casual shirt.jpg" alt="Casual Linen Shirt" />
               </div>
               <div class="item-info">
-                <h3>Casual Shirt</h3>
+                <h3>Casual Linen Shirt</h3>
                 <p>Tops • Everyday</p>
               </div>
             </div>
- <!-- 11. Classy Boots -->
+
+            <!-- 4. Minimal Beige Top -->
             <div class="clothing-card">
               <div class="image-box">
-                <img src="images/Classy boots for women.jpg" alt="Classy Boots" />
+                <img src="images/top.jpg" alt="Minimal Beige Top" />
               </div>
               <div class="item-info">
-                <h3>Classy Boots</h3>
-                <p>Footwear • Leather</p>
+                <h3>Minimal Beige Top</h3>
+                <p>Tops • Basic</p>
               </div>
             </div>
-           
 
             <!-- 5. Sleek Beige Dress -->
             <div class="clothing-card">
@@ -201,17 +184,6 @@
               </div>
             </div>
 
-             <!-- 8. Beige Trousers -->
-            <div class="clothing-card">
-              <div class="image-box">
-                <img src="images/trousers.jpg" alt="Tailored Beige Trousers" />
-              </div>
-              <div class="item-info">
-                <h3>Beige Trousers</h3>
-                <p>Bottoms • Tailored</p>
-              </div>
-            </div>
-
             <!-- 7. Burgundy Long Coat -->
             <div class="clothing-card">
               <div class="image-box">
@@ -223,7 +195,16 @@
               </div>
             </div>
 
-           
+            <!-- 8. Beige Trousers -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/trousers.jpg" alt="Beige Trousers" />
+              </div>
+              <div class="item-info">
+                <h3>Beige Trousers</h3>
+                <p>Bottoms • Tailored</p>
+              </div>
+            </div>
 
             <!-- 9. Blue Denim Jeans -->
             <div class="clothing-card">
@@ -242,108 +223,115 @@
                 <img src="images/blush red mesh skirt.jpg" alt="Blush Red Mesh Skirt" />
               </div>
               <div class="item-info">
-                <h3>Blush Red Mesh Skirt</h3>
+                <h3>Blush Red Skirt</h3>
                 <p>Bottoms • Chic</p>
               </div>
             </div>
 
-            
-
-           
-
-           
-
-          </div>
-          
-
-         
-
-          <div class="grid-closet" id="grid"></div>
-          <div class="empty" id="empty" hidden></div>
-
-          <div class="banner">
-            <div class="l">
-              <span class="ic">★</span>
-              <div>
-                <p class="arch" id="twin-title">Zendaya's Look This Week</p>
-                <small>Your style twin just wore an elevated casual look — 3 items in your closet can recreate it.</small>
+            <!-- 11. Classy Boots -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/Classy boots for women.jpg" alt="Classy Boots" />
+              </div>
+              <div class="item-info">
+                <h3>Classy Boots</h3>
+                <p>Footwear • Leather</p>
               </div>
             </div>
-            <a class="btn btn-gold" href="notes.html">SEE INSPIRATION <span class="arrow">→</span></a>
-          </div>
-        </section>
-      </div>
 
-      <!-- Data Export/Import Footer -->
-      <div class="databar">
-        <span><span class="dot"></span>Closet saved locally as JSON · <b id="data-count">0</b> pieces</span>
-        <span class="actions">
-          <button type="button" id="export-json">Export JSON</button>
-          <label>Import JSON<input type="file" id="import-json" accept=".json,application/json" hidden /></label>
-        </span>
-      </div>
+            <!-- 12. Beige Shoes -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/shoes.jpg" alt="Beige Shoes" />
+              </div>
+              <div class="item-info">
+                <h3>Beige Shoes</h3>
+                <p>Footwear • Minimal</p>
+              </div>
+            </div>
+
+            <!-- 13. Classic Belt -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/belt.jpg" alt="Classic Belt" />
+              </div>
+              <div class="item-info">
+                <h3>Classic Belt</h3>
+                <p>Accessories • Leather</p>
+              </div>
+            </div>
+
+
+            <!-- --- MEN'S COLLECTION --- -->
+
+<!-- --- MEN'S COLLECTION --- -->
+
+            <!-- 14. Valmere Men's Jacket -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/jacket.jpg" alt="Valmere Men's Jacket" />
+              </div>
+              <div class="item-info">
+                <h3>Valmere Men's Jacket</h3>
+                <p>Men • Outerwear</p>
+              </div>
+            </div>
+
+            <!-- 15. Black Casual Shirt -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/blackshirt.jpg" alt="Black Casual Shirt" />
+              </div>
+              <div class="item-info">
+                <h3>Black Casual Shirt</h3>
+                <p>Men • Tops</p>
+              </div>
+            </div>
+
+            <!-- 16. Cotton Blend Shirt -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/cottonshirt.jpg" alt="Cotton Blend Shirt" />
+              </div>
+              <div class="item-info">
+                <h3>Cotton Blend Shirt</h3>
+                <p>Men • Tops</p>
+              </div>
+            </div>
+
+           
+
+            <!-- 18. Men's Leather Belt -->
+            <div class="clothing-card">
+              <div class="image-box">
+                <img src="images/leather belt.jpg" alt="Men's Leather Belt" />
+              </div>
+              <div class="item-info">
+                <h3>Men's Leather Belt</h3>
+                <p>Men • Accessories</p>
+              </div>
+            </div>
     </div>
 
-    <!-- Add / Edit Item Modal -->
-    <dialog class="modal wide" id="item-modal" aria-labelledby="item-title">
-      <button type="button" class="modal-x" data-close aria-label="Close">✕</button>
-      <form id="item-form" novalidate>
-        <p class="eyebrow" id="item-eyebrow">New piece</p>
-        <h2 class="modal-title" id="item-title">Add to your <em>closet.</em></h2>
-        
-        <div class="item-grid">
-          <div class="item-preview" id="item-preview"></div>
-          <div>
-            <div class="f-row">
-              <label class="f-label" for="it-name">Item name</label>
-              <input class="f-input" id="it-name" name="name" type="text" maxlength="40" placeholder="e.g. Cashmere Crew — Oat" />
-              <p class="f-error" data-err="name"></p>
-            </div>
-            <div class="f-row">
-              <label class="f-label" for="it-cat">Category</label>
-              <select class="f-input" id="it-cat" name="cat">
-                <option value="">Choose a category…</option>
-                <option>Tops</option>
-                <option>Bottoms</option>
-                <option>Dresses</option>
-                <option>Outerwear</option>
-                <option>Formal</option>
-                <option>Footwear</option>
-              </select>
-              <p class="f-error" data-err="cat"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="f-row">
-          <p class="f-label">Silhouette</p>
-          <div class="kinds" id="kinds" role="radiogroup" aria-label="Silhouette"></div>
-          <p class="f-error" data-err="kind"></p>
-        </div>
-
-        <div class="f-row">
-          <p class="f-label">Colour</p>
-          <div class="colors" id="colors"></div>
-          <p class="f-error" data-err="color"></p>
-        </div>
-
-        <div class="f-row">
-          <label class="f-label" for="it-notes">
-            Notes <span class="f-count" id="notes-count">0 / 120</span>
-          </label>
-          <textarea class="f-input" id="it-notes" name="notes" maxlength="120" placeholder="Fabric, fit, where you bought it…"></textarea>
-          <p class="f-error" data-err="notes"></p>
-        </div>
-
-        <label class="check form-check">
-          <input type="checkbox" name="worn" /> I'm wearing this today
+    <!-- Modal Form for Adding Items -->
+    <dialog class="modal wide" id="item-modal">
+      <form id="item-form" method="dialog">
+        <h3>Add Wardrobe Item</h3>
+        <label>Title <input type="text" id="item-title" required /></label>
+        <label>Category
+          <select id="item-category">
+            <option value="Tops">Tops</option>
+            <option value="Bottoms">Bottoms</option>
+            <option value="Outerwear">Outerwear</option>
+            <option value="Dresses">Dresses</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Men">Men</option>
+          </select>
         </label>
-
-        <div class="modal-actions">
-          <button type="button" class="link danger" id="delete-item" hidden>Delete item</button>
-          <span class="spacer"></span>
-          <button type="button" class="btn-line" data-close>Cancel</button>
-          <button type="submit" class="btn-solid" id="item-submit">ADD TO CLOSET</button>
+        <div class="dialog-actions">
+          <button type="button" id="close-modal-btn">Cancel</button>
+          <button type="submit">Save</button>
         </div>
       </form>
     </dialog>
