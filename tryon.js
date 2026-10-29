@@ -152,7 +152,7 @@ const FALLBACK = [
 const closet = store.get('ss.closet', null) || FALLBACK
 const profile = store.get('ss.profile', null)
 const session = store.get('ss.session', null)
-const SKIN = profile?.skinTone || '#d8a878'
+const SKIN = profile?.skinTone || '#d8a878';
 
 const SLOTS = {
   top: { label: 'Top layer', cats: ['Outerwear', 'Tops', 'Formal'], toggle: 'rollSleeves', toggleLabel: 'Roll sleeves' },
