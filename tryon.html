@@ -35,13 +35,13 @@
           <div class="live"><span class="dot">●</span> AI Rendering Active</div>
           <div class="views" id="views"></div>
           <div class="avatar-wrap">
-            <div style="position: relative">
-              <div id="avatar" class="view-front"></div>
-              <div class="anno" style="left: -140px; top: 96px"><span class="lab" id="anno-top">Golden Wrap Blazer</span><span class="ln"></span><span class="pt"></span></div>
-              <div class="anno" style="left: -150px; bottom: 64px"><span class="lab" id="anno-bottom">Slim Trousers — Charcoal</span><span class="ln"></span><span class="pt"></span></div>
-              <div class="anno" style="right: -150px; top: 160px"><span class="pt"></span><span class="ln"></span><span class="lab" id="anno-fit">Tailored Fit — Perfect</span></div>
-            </div>
-          </div>
+  <div style="position: relative">
+    <div id="avatar" class="view-front"></div>
+    <div class="anno" style="left: -140px; top: 96px"><span class="lab" id="anno-top">Golden Wrap Blazer</span><span class="ln"></span><span class="pt"></span></div>
+    <div class="anno" style="left: -150px; bottom: 64px"><span class="lab" id="anno-bottom">Slim Trousers — Charcoal</span><span class="ln"></span><span class="pt"></span></div>
+    <div class="anno" style="right: -150px; top: 160px"><span class="pt"></span><span class="ln"></span><span class="lab" id="anno-fit">Tailored Fit — Perfect</span></div>
+  </div>
+</div>
         </div>
 
         <!-- controls -->
@@ -107,7 +107,10 @@
           <div class="saved">
             <div class="saved-head">
               <p class="eyebrow">Saved Looks</p>
-              <span id="saved-count" class="eyebrow"></span>
+             <div>
+                <span id="saved-count" class="eyebrow" style="margin-right: 12px;"></span>
+                <button type="button" id="clear-all" style="border:none; background:transparent; font-size:11px; color:#b4472f; cursor:pointer;">Clear All</button>
+              </div>
             </div>
             <div id="saved-list"></div>
           </div>

@@ -3,7 +3,7 @@
 
 /* --- shared base (each page keeps its own copy so it stands alone) --- */
 :root {
-  --bg: rgb(247, 243, 243);
+  --bg: #f7f5f2;
   --white: #fff;
   --ink: #292524;
   --muted: #78716c;
