@@ -187,6 +187,7 @@ if (session) {
 }
 
 /* ---------- avatar reacts to pieces + toggles ---------- */
+/* ---------- avatar reacts to pieces + toggles ---------- */
 function renderAvatar() {
   const { rollSleeves: rs, cuffed: cf, necklace } = state
   const topC = state.top.color
