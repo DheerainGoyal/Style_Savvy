@@ -262,20 +262,33 @@ function renderWearing() {
     .join('')
 }
 wearingEl.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-toggle]')
+  let changed = false;
+  const t = e.target.closest('[data-toggle]');
   if (t) {
-    state[t.dataset.toggle] = !state[t.dataset.toggle]
-    renderAll()
+    state[t.dataset.toggle] = !state[t.dataset.toggle];
+    changed = true;
   }
-  const s = e.target.closest('[data-swap]')
+  const s = e.target.closest('[data-swap]');
   if (s) {
-    const slot = s.dataset.swap
-    const list = optionsFor(slot)
-    const i = list.findIndex((x) => x.id === state[slot].id)
-    state[slot] = list[(i + 1) % list.length]
-    renderAll()
+    const slot = s.dataset.swap;
+    const list = optionsFor(slot);
+    const i = list.findIndex((x) => x.id === state[slot].id);
+    state[slot] = list[(i + 1) % list.length];
+    changed = true;
   }
-})
+  
+  if (changed) {
+    const live = document.querySelector('.live');
+    live.innerHTML = '<span class="dot" style="color:#c9a96e">●</span> Generating...';
+    document.getElementById('avatar').style.opacity = '0.5';
+    
+    setTimeout(() => {
+      renderAll();
+      live.innerHTML = '<span class="dot">●</span> AI Rendering Active';
+      document.getElementById('avatar').style.opacity = '1';
+    }, 500);
+  }
+});
 document.getElementById('clear-all')?.addEventListener('click', () => {
   if (looks.length > 0 && confirm('Are you sure you want to delete all saved looks?')) {
     looks = [];
