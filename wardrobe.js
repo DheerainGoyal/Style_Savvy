@@ -290,30 +290,7 @@ modal.addEventListener('click', (e) => {
   if (e.target === modal || e.target.closest('[data-close]')) modal.close();
 });
 
-// Live Search Functionality for Wardrobe Items
-document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.getElementById("search");
-  
-  if (!searchInput) return;
 
-  searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    const cards = document.querySelectorAll(".clothing-card");
-
-    cards.forEach((card) => {
-      // Get title and category text inside each card
-      const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
-      const category = card.querySelector("p")?.textContent.toLowerCase() || "";
-
-      // Check if search query matches title or category
-      if (title.includes(query) || category.includes(query)) {
-        card.style.display = ""; // Show card
-      } else {
-        card.style.display = "none"; // Hide card
-      }
-    });
-  });
-});
 
 /* --- Initialize Page --- */
 saveCloset();
