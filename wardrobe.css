@@ -923,3 +923,60 @@ select.f-input {
   .search,
   .search:focus { width: 100%; }
 }
+
+
+/* Styling buttons inside Add Wardrobe Item popup */
+
+#item-modal button {
+    background-color: #6b4f3a;
+    color: #fffaf5;
+    border: 1px solid #6b4f3a;
+    border-radius: 25px;
+    padding: 10px 22px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Button hover effect */
+#item-modal button:hover {
+    background-color: #8b6b50;
+    transform: translateY(-2px);
+}
+
+/* Cancel button */
+#item-modal button[type="button"] {
+    background-color: #eee3d8;
+    color: #6b4f3a;
+    border: 1px solid #cbb8a5;
+}
+
+/* Cancel button hover */
+#item-modal button[type="button"]:hover {
+    background-color: #e2d1c1;
+}
+
+/* Choose File button */
+#item-modal input[type="file"]::file-selector-button {
+    background-color: #eee3d8;
+    color: #6b4f3a;
+    border: 1px solid #cbb8a5;
+    border-radius: 20px;
+    padding: 9px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s ease;
+}
+
+/* Choose File hover */
+#item-modal input[type="file"]::file-selector-button:hover {
+    background-color: #d9c5b2;
+}
+
+/* File input text */
+#item-modal input[type="file"] {
+    color: #6b4f3a;
+    font-family: inherit;
+}
