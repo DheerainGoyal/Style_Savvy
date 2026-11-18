@@ -1,0 +1,301 @@
+{
+  "info": {
+    "_postman_id": "c1f7a29e-4e89-4b32-8b01-style-savvy-notes",
+    "name": "StyleSavvy Notes CRUD API",
+    "description": "Postman Collection for testing StyleSavvy Notes backend CRUD routes on feat/backend-notes branch.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "health"]
+        }
+      }
+    },
+    {
+      "name": "Stylist Notes",
+      "item": [
+        {
+          "name": "1. GET All Notes (Read All)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes"]
+            }
+          }
+        },
+        {
+          "name": "2. POST Create Note (Create)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lookName\": \"Parisian Tailored Chic\",\n  \"lookKicker\": \"TRENDING LOOK\",\n  \"lookMeta\": \"3 items · French Minimalist\",\n  \"score\": 95,\n  \"top\": {\n    \"kind\": \"blazer\",\n    \"bg\": \"#f3ece1\",\n    \"color\": \"#bfa068\"\n  },\n  \"whyItWorks\": {\n    \"title\": \"Why This Works\",\n    \"text\": \"Clean lines meet relaxed tailoring. The double-breasted cut adds authority while remaining effortlessly styled.\",\n    \"calloutTitle\": \"Hourglass Taper Silhouette\",\n    \"calloutText\": \"Accentuates waist while maintaining tailored shoulder structure.\"\n  },\n  \"colors\": [\n    {\n      \"name\": \"Camel Wool\",\n      \"hex\": \"#bfa068\",\n      \"desc\": \"Classic neutral for timeless wardrobe investment.\"\n    }\n  ],\n  \"tip\": {\n    \"badge\": \"✦ AI Recommendation\",\n    \"quote\": \"\\\"Pair with black pointed mules and minimalist sunglasses.\\\"\"\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes"]
+            }
+          }
+        },
+        {
+          "name": "3. GET Note By ID (Read One)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "NOTE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. PUT Update Note (Update)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 97,\n  \"lookMeta\": \"3 items · Updated Editorial\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notes/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "NOTE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. DELETE Note (Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "NOTE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback CRUD",
+      "item": [
+        {
+          "name": "1. GET All Feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/feedback",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "feedback"]
+            }
+          }
+        },
+        {
+          "name": "2. POST Submit Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"tryTip\": \"yes\",\n  \"comment\": \"Loved the inverted triangle explanation!\",\n  \"lookName\": \"Elevated Casual\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notes/feedback",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "feedback"]
+            }
+          }
+        },
+        {
+          "name": "3. DELETE Feedback Entry",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/feedback/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "feedback", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "FEEDBACK_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat CRUD",
+      "item": [
+        {
+          "name": "1. GET Chat History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/chat",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "chat"]
+            }
+          }
+        },
+        {
+          "name": "2. POST Save Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"user\",\n  \"text\": \"What belt should I add?\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notes/chat",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "chat"]
+            }
+          }
+        },
+        {
+          "name": "3. DELETE Clear Chat History",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/chat",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "chat"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Refinements CRUD",
+      "item": [
+        {
+          "name": "1. GET Checked Refinements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/notes/refinements?userId=guest",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "refinements"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "guest"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. PUT Update Refinements",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"guest\",\n  \"done\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notes/refinements",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notes", "refinements"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

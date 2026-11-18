@@ -1,0 +1,35 @@
+[
+  {
+    "lookName": "Elevated Casual",
+    "lookKicker": "TODAY'S LOOK",
+    "lookMeta": "3 items · Zendaya-inspired",
+    "score": 91,
+    "top": {
+      "kind": "blazer",
+      "bg": "#efe6d3",
+      "color": "#c9a96e"
+    },
+    "whyItWorks": {
+      "title": "Why This Works",
+      "text": "The <strong>structured, broad shoulders of the golden blazer</strong> create an inverted triangle silhouette, balancing the slimmer cut of the tailored trousers below. This contrast between <strong>volume on top and precision below</strong> is a cornerstone of power dressing — elongating your frame and drawing the eye upward.",
+      "calloutTitle": "Inverted Triangle Silhouette",
+      "calloutText": "Broad shoulders taper to slim ankles — universally flattering. Creates visual height and an elongated, editorial proportion."
+    },
+    "colors": [
+      {
+        "name": "Warm Gold",
+        "hex": "#c9a96e",
+        "desc": "Adds richness & depth — complements warm skin undertones."
+      },
+      {
+        "name": "Deep Charcoal",
+        "hex": "#292524",
+        "desc": "Grounds the palette — creates contrast & elongates legs."
+      }
+    ],
+    "tip": {
+      "badge": "✦ AI Recommendation",
+      "quote": "\"Try adding a delicate gold chain to break up the neckline of the blazer. A single fine chain at collarbone length will introduce jewelry as a counterpoint to the bold structure above.\""
+    }
+  }
+]

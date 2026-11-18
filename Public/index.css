@@ -3,7 +3,7 @@
 
 /* --- shared base (each page keeps its own copy so it stands alone) --- */
 :root {
-  --bg: #f7f5f2;
+  --bg: #f8f4f0;
   --white: #fff;
   --ink: #292524;
   --muted: #78716c;
@@ -13,7 +13,7 @@
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Inter', system-ui, sans-serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0;}
 body { font-family: var(--sans); color: var(--ink); background: var(--ink); -webkit-font-smoothing: antialiased; }
 .shell { max-width: 1400px; min-height: 100vh; margin: 0 auto; background: var(--bg); box-shadow: 0 20px 60px rgba(0,0,0,0.4); overflow: hidden; }
 .serif { font-family: var(--serif); }

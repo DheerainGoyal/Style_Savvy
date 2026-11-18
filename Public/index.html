@@ -15,36 +15,35 @@
         <!-- left: brand -->
         <div class="left">
           <div class="row">
-            <span class="serif" style="font-size: 24px">StyleSavvy</span>
+            <span class="serif" style="font-size: 38px">StyleSavvy</span>
             <span class="eyebrow">AI Wardrobe Assistant</span>
           </div>
 
           <div class="hero">
-            <p class="eyebrow" style="margin-bottom: 24px">Your personal stylist, reimagined</p>
-            <h1 class="display">Dress like your <em id="rotating">style twin.</em></h1>
+            <p class="eyebrow" style="margin-bottom: 24px">Your Personal Stylist</p>
+            <h1 class="display">Be Your Own <em id="rotating"> StyleSavvy</em></h1>
             <p class="lead">
-              Build a digital wardrobe, try looks on your own avatar, and get editorial-grade styling notes tuned to
-              your body, your palette, and the weather outside.
+             Discover your signature style, visualize outfits with AI try-on, and match with your celebrity style twin.
             </p>
             <div class="cta">
               <a class="btn btn-dark" href="onboarding.html" data-auth="signup" data-next="onboarding.html">BUILD MY WARDROBE <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="wardrobe.html">Explore the closet</a>
+              <a class="btn btn-outline" href="wardrobe.html">Explore your closet</a>
             </div>
             <p class="signin" id="signin-line">
-              Already have an account? <a href="#signin" data-auth="signin">Sign in</a>
+              Already have an account? <a href="#signin" data-auth="signin">Sign-in</a>
             </p>
           </div>
 
           <div>
             <div class="stats">
-              <span><b>94%</b> match accuracy</span>
-              <span><b>12k</b> curated looks</span>
+              <span><b>94%</b> Match accuracy</span>
+              <span><b>12k</b> Curated looks</span>
             </div>
             <div class="databar">
-              <span><span class="dot"></span>Accounts saved locally as JSON · <b id="data-count">0</b> records</span>
-              <span class="actions">
+              <span><span class="dot"></span>Accounts saved locally as JSON <b id="data-count">0</b> records</span>
+              <span class="actions" aria-hidden="true">
                 <button type="button" id="export-json">Export JSON</button>
-                <label>Import JSON<input type="file" id="import-json" accept=".json,application/json" hidden /></label>
+                <label>Import JSON <input type="file" id="import-json" accept=".json,application/json" hidden  aria-label="Import accounts from JSON file"/></label>
               </span>
             </div>
           </div>
@@ -53,15 +52,15 @@
         <!-- right: visual -->
         <div class="visual">
           <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=1600&fit=crop&auto=format"
-            alt="Model in an elegant minimalist look — white blouse and tailored trousers"
+            src="images\Elegant black top outfit.jpg"
+            alt="Model in an elegant minimalist look — Assymetrical Top and tailored pants in warm neutrals"
           />
           <div class="overlay"></div>
-          <div class="badge">● AI RENDERING ACTIVE</div>
+          <div class="badge"> ● AI RENDERING ACTIVE</div>
           <div class="caption">
             <p class="eyebrow" style="color: rgba(255, 255, 255, 0.6); margin-bottom: 4px">Style archetype</p>
             <p class="arch">Elegant Minimalist</p>
-            <small>Clean lines · tailored silhouettes · warm neutrals</small>
+            <small>Better Combos · Tailored Silhouettes · Warm Neutrals</small>
           </div>
         </div>
       </div>
@@ -100,7 +99,7 @@
 
       <!-- create account -->
       <form id="signup-form" data-view="signup" novalidate hidden>
-        <p class="eyebrow">Step 00 — Join</p>
+        <p class="eyebrow">Step 00 - Join</p>
         <h2 class="modal-title">Create your <em>account.</em></h2>
         <div class="f-row">
           <label class="f-label" for="su-name">Full name</label>
@@ -128,7 +127,7 @@
           <p class="f-error" data-err="confirm"></p>
         </div>
         <div class="f-row">
-          <label class="check"><input type="checkbox" name="terms" /> I agree to the Terms and Privacy Policy</label>
+          <label class="check"><input type="checkbox" name="terms" /> I agree to the Terms and Privacy Policies</label>
           <p class="f-error" data-err="terms"></p>
         </div>
         <p class="form-msg" data-msg role="alert"></p>
@@ -165,7 +164,7 @@
       </div>
     </dialog>
 
-    <script type="module" src="index.js"></script>
+    <script src="index.js"></script>
     <!-- figma:body-end -->
   </body>
 </html>
