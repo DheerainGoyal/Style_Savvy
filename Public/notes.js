@@ -13,10 +13,16 @@ const store = {
     }
   },
   set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
+    try {
+      localStorage.setItem(key, JSON.stringify(value))
+    } catch (e) {
+      console.warn('localStorage set failed:', e)
+    }
   },
   remove(key) {
-    localStorage.removeItem(key)
+    try {
+      localStorage.removeItem(key)
+    } catch {}
   },
 }
 
@@ -134,52 +140,144 @@ const SHAPE_PATHS = {
 const garment = (kind, bg, color) =>
   `<div class="garment" style="background:${bg}"><svg viewBox="0 0 100 88" fill="${color}"><path d="${SHAPE_PATHS[kind] || SHAPE_PATHS.blazer}"/></svg></div>`
 
-const profile = store.get('ss.profile', null)
-const latestLook = store.get('ss.looks', [])[0] || null
-const twin = profile?.styleTwin || 'Zendaya'
-
-/* ---------- look summary (latest saved look from Try-On) ---------- */
-if (latestLook) {
-  const top = latestLook.items.top
-  document.getElementById('look-thumb').innerHTML = garment(top.kind, '#efe6d3', top.color)
-  document.getElementById('look-kicker').textContent = `LATEST SAVED LOOK · ${latestLook.occasion.toUpperCase()}`
-  document.getElementById('look-name').textContent = latestLook.name
-  document.getElementById('look-meta').textContent = `3 items · ${twin}-inspired · ${'★'.repeat(latestLook.rating)}`
-  document.getElementById('look-score').textContent = Math.min(99, 80 + latestLook.rating * 3 + (latestLook.styling?.necklace ? 2 : 0))
-} else {
-  document.getElementById('look-thumb').innerHTML = garment('blazer', '#efe6d3', '#c9a96e')
-  document.getElementById('look-meta').textContent = `3 items · ${twin}-inspired`
+/* =========================================================================
+   GROUND RULE 3: Keep Graceful Fallbacks!
+   If GET /api/notes returns an empty collection during someone else's demo,
+   keep your FALLBACK array/objects so the notes page NEVER renders blank!
+   ========================================================================= */
+const FALLBACK_NOTE = {
+  id: 'default-note',
+  title: 'Stylist Notes.',
+  lookName: 'Elevated Casual',
+  lookKicker: "TODAY'S LOOK",
+  lookMeta: '3 items · Zendaya-inspired',
+  score: 91,
+  top: { kind: 'blazer', bg: '#efe6d3', color: '#c9a96e' },
+  whyItWorks: {
+    title: 'Why This Works',
+    text: 'The <strong>structured, broad shoulders of the golden blazer</strong> create an inverted triangle silhouette, balancing the slimmer cut of the tailored trousers below. This contrast between <strong>volume on top and precision below</strong> is a cornerstone of power dressing — elongating your frame and drawing the eye upward.',
+    calloutTitle: 'Inverted Triangle Silhouette',
+    calloutText: 'Broad shoulders taper to slim ankles — universally flattering. Creates visual height and an elongated, editorial proportion.'
+  },
+  colors: [
+    { name: 'Warm Gold', hex: '#c9a96e', desc: 'Adds richness & depth — complements warm skin undertones.' },
+    { name: 'Deep Charcoal', hex: '#292524', desc: 'Grounds the palette — creates contrast & elongates legs.' }
+  ],
+  tip: {
+    badge: '✦ AI Recommendation',
+    quote: '"Try adding a delicate gold chain to break up the neckline of the blazer. A single fine chain at collarbone length will introduce jewelry as a counterpoint to the bold structure above."'
+  }
 }
 
-/* ---------- further refinements (checklist, saved) ---------- */
-const REFINEMENTS = [
+const FALLBACK_REFINEMENTS = [
   { n: 1, t: 'Tuck One Corner', d: 'Slightly tucking the front-left of the blazer into the waistband creates a deliberate, editorial asymmetry that signals style intention.' },
   { n: 2, t: 'Cuff the Trousers', d: 'A single, clean 1.5-inch cuff at the ankle reveals the tan of your mules, creating a colour echo that ties the look together.' },
   { n: 3, t: 'Swap to a Slim Clutch', d: 'A minimal structured clutch in black or tan maintains the editorial proportions without adding visual bulk.' },
 ]
+
+const FALLBACK_CHAT = [
+  { role: 'ai', text: 'Hello! I am your AI Stylist. Ask me anything about tailoring, pairings, color balance, or elevating this look.', at: new Date().toISOString() }
+]
+
+/* Local State */
+const profile = store.get('ss.profile', null)
+const latestLook = store.get('ss.looks', [])[0] || null
+const twin = profile?.styleTwin || 'Zendaya'
+
+let currentNote = FALLBACK_NOTE
+let refinementsList = FALLBACK_REFINEMENTS
 let done = store.get('ss.refinements', [])
+let chat = store.get('ss.chat', FALLBACK_CHAT)
+let feedback = store.get('ss.feedback', [])
+
+/* ---------- Render Stylist Note Breakdown ---------- */
+function renderNote(note) {
+  if (!note) note = FALLBACK_NOTE
+
+  // Prefer latest saved look from Try-On if available, otherwise use note's look
+  if (latestLook) {
+    const top = latestLook.items?.top || note.top
+    document.getElementById('look-thumb').innerHTML = garment(top.kind || 'blazer', '#efe6d3', top.color || '#c9a96e')
+    document.getElementById('look-kicker').textContent = `LATEST SAVED LOOK · ${(latestLook.occasion || 'CASUAL').toUpperCase()}`
+    document.getElementById('look-name').textContent = latestLook.name
+    document.getElementById('look-meta').textContent = `3 items · ${twin}-inspired · ${'★'.repeat(latestLook.rating || 5)}`
+    document.getElementById('look-score').textContent = Math.min(99, 80 + (latestLook.rating || 3) * 3 + (latestLook.styling?.necklace ? 2 : 0))
+  } else {
+    const top = note.top || { kind: 'blazer', bg: '#efe6d3', color: '#c9a96e' }
+    document.getElementById('look-thumb').innerHTML = garment(top.kind, top.bg, top.color)
+    document.getElementById('look-kicker').textContent = note.lookKicker || "TODAY'S LOOK"
+    document.getElementById('look-name').textContent = note.lookName || 'Elevated Casual'
+    document.getElementById('look-meta').textContent = note.lookMeta || `3 items · ${twin}-inspired`
+    document.getElementById('look-score').textContent = note.score || 91
+  }
+
+  // Why this works section
+  const whyTitleEl = document.getElementById('why-title')
+  const whyTextEl = document.getElementById('why-text')
+  const calloutTitleEl = document.getElementById('callout-title')
+  const calloutTextEl = document.getElementById('callout-text')
+  if (whyTitleEl && note.whyItWorks?.title) whyTitleEl.textContent = note.whyItWorks.title
+  if (whyTextEl && note.whyItWorks?.text) whyTextEl.innerHTML = note.whyItWorks.text
+  if (calloutTitleEl && note.whyItWorks?.calloutTitle) calloutTitleEl.textContent = note.whyItWorks.calloutTitle
+  if (calloutTextEl && note.whyItWorks?.calloutText) calloutTextEl.textContent = note.whyItWorks.calloutText
+
+  // Color theory section
+  const colorsContainer = document.getElementById('colors-list')
+  if (colorsContainer && Array.isArray(note.colors) && note.colors.length) {
+    colorsContainer.innerHTML = note.colors
+      .map(
+        (c) => `<div class="colcard">
+          <div class="sw" style="background: ${esc(c.hex)}"></div>
+          <div class="t"><span style="font-size: 14px; font-weight: 500">${esc(c.name)}</span><small>${esc(c.desc)}</small></div>
+        </div>`
+      )
+      .join('')
+  }
+
+  // Styling tip section
+  const tipBadgeEl = document.getElementById('tip-badge')
+  const tipQuoteEl = document.getElementById('tip-quote')
+  if (tipBadgeEl && note.tip?.badge) tipBadgeEl.textContent = note.tip.badge
+  if (tipQuoteEl && note.tip?.quote) tipQuoteEl.textContent = note.tip.quote
+}
+
+/* ---------- further refinements (checklist, saved) ---------- */
 const refineEl = document.getElementById('refinements')
 function renderRefinements() {
-  refineEl.innerHTML = REFINEMENTS.map(
-    (r) => `<label class="refine ${done.includes(r.n) ? 'done' : ''}">
+  refineEl.innerHTML = refinementsList
+    .map(
+      (r) => `<label class="refine ${done.includes(r.n) ? 'done' : ''}">
       <input type="checkbox" value="${r.n}" ${done.includes(r.n) ? 'checked' : ''} />
       <span class="n">${done.includes(r.n) ? '✓' : r.n}</span>
-      <div><span class="t" style="font-size:14px;font-weight:500">${r.t}</span><p>${r.d}</p></div>
+      <div><span class="t" style="font-size:14px;font-weight:500">${esc(r.t)}</span><p>${esc(r.d)}</p></div>
     </label>`
-  ).join('')
-  document.getElementById('refine-progress').textContent = `${done.length} / ${REFINEMENTS.length} TRIED`
+    )
+    .join('')
+  document.getElementById('refine-progress').textContent = `${done.length} / ${refinementsList.length} TRIED`
 }
-refineEl.addEventListener('change', (e) => {
+
+refineEl.addEventListener('change', async (e) => {
   const n = +e.target.value
   done = e.target.checked ? [...done, n] : done.filter((x) => x !== n)
   store.set('ss.refinements', done)
   renderRefinements()
   refreshCount()
-  if (done.length === REFINEMENTS.length) toast('All refinements tried — look perfected')
+
+  /* GROUND RULE 2: Relative URL fetch('/api/notes/refinements') */
+  try {
+    await fetch('/api/notes/refinements', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ done }),
+    })
+  } catch (err) {
+    console.warn('Backend offline, refinement saved locally:', err)
+  }
+
+  if (done.length === refinementsList.length) toast('All refinements tried — look perfected')
 })
 
 /* ---------- AI chat (canned stylist replies, history saved) ---------- */
-let chat = store.get('ss.chat', [])
 const logEl = document.getElementById('chat-log')
 const chatForm = document.getElementById('chat-form')
 const inputEl = chatForm.elements.question
@@ -188,14 +286,14 @@ const sendBtn = chatForm.querySelector('.send')
 const REPLIES = [
   [/belt/, () => `A slim tan leather belt (about 2.5 cm wide) will define your waist without competing with the blazer. Match the buckle to your jewellery — gold here.`],
   [/shoe|heel|mule|sneaker|boot|footwear/, (q) =>
-      /evening|night|dinner|date/.test(q)
-        ? 'For evening, switch the mules for a pointed slingback or a strappy heeled sandal in black or metallic gold — it lengthens the leg and dresses up the trousers instantly.'
-        : 'Pointed-toe flats or loafers in tan keep the line clean by day. White leather sneakers work if you want to dress the look down.'],
+    /evening|night|dinner|date/.test(q)
+      ? 'For evening, switch the mules for a pointed slingback or a strappy heeled sandal in black or metallic gold — it lengthens the leg and dresses up the trousers instantly.'
+      : 'Pointed-toe flats or loafers in tan keep the line clean by day. White leather sneakers work if you want to dress the look down.'],
   [/bag|clutch|purse|tote/, () => 'Go structured and compact: a tan or black top-handle bag or slim clutch. Avoid slouchy totes, which soften the sharp shoulder line.'],
   [/dress (it )?down|casual|weekend|relaxed/, () => 'Swap the trousers for straight-leg denim, add a white tee under the blazer, and finish with clean sneakers. Push the sleeves up for ease.'],
   [/colou?r|palette|match/, () => `Your palette works best with warm neutrals — camel, cream, chocolate, and gold. For contrast, try deep olive or burgundy rather than bright cool tones.`],
   [/weather|rain|cold|hot|warm|winter|summer/, () =>
-      `For ${profile?.city || 'your city'}, layer a lightweight trench over the blazer on cooler days, and swap to linen trousers when it heats up.`],
+    `For ${profile?.city || 'your city'}, layer a lightweight trench over the blazer on cooler days, and swap to linen trousers when it heats up.`],
   [/jewel|necklace|earring|ring|accessor/, () => 'Keep it fine and gold: one delicate chain at collarbone length, plus small hoops. Let the blazer stay the statement.'],
   [/work|office|meeting|interview/, () => 'For work, keep the blazer buttoned, add a silk shell underneath, and choose a low block heel. Polished, but still unmistakably you.'],
   [/twin|celebrit|inspir/, () => `${twin} often pairs a strong shoulder with a slim leg and one statement accessory. Copy that formula and swap in pieces you already own.`],
@@ -212,7 +310,7 @@ const fmtTime = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit',
 function renderChat(typing = false) {
   logEl.innerHTML =
     (chat.length
-      ? chat.map((m) => `<div class="msg ${m.role}">${esc(m.text)}<time>${fmtTime(m.at)}</time></div>`).join('')
+      ? chat.map((m) => `<div class="msg ${m.role}">${esc(m.text)}<time>${fmtTime(m.at || m.createdAt)}</time></div>`).join('')
       : '<p class="chat-empty">Ask a question below — answers are saved with your notes.</p>') +
     (typing ? '<div class="msg ai typing" aria-label="Stylist is typing"><span></span><span></span><span></span></div>' : '')
   document.getElementById('clear-chat').hidden = !chat.length
@@ -229,23 +327,44 @@ const chatRules = {
 }
 inputEl.addEventListener('input', () => showError(chatForm, 'question', ''))
 
-chatForm.addEventListener('submit', (e) => {
+chatForm.addEventListener('submit', async (e) => {
   e.preventDefault()
   if (!validate(chatForm, chatRules)) return
   const text = val(chatForm, 'question')
-  chat.push({ role: 'user', text, at: new Date().toISOString() })
+  const userMsg = { role: 'user', text, at: new Date().toISOString() }
+  chat.push(userMsg)
   saveChat()
   chatForm.reset()
   sendBtn.disabled = true
   renderChat(true)
-  logEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  setTimeout(() => {
-    chat.push({ role: 'ai', text: aiReply(text), at: new Date().toISOString() })
+  logEl.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+
+  /* GROUND RULE 2: Relative URL fetch('/api/notes/chat') */
+  try {
+    fetch('/api/notes/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userMsg),
+    }).catch(() => {})
+  } catch {}
+
+  setTimeout(async () => {
+    const aiMsg = { role: 'ai', text: aiReply(text), at: new Date().toISOString() }
+    chat.push(aiMsg)
     saveChat()
     renderChat()
     sendBtn.disabled = false
-    logEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    logEl.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     inputEl.focus()
+
+    /* GROUND RULE 2: Relative URL fetch('/api/notes/chat') */
+    try {
+      fetch('/api/notes/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(aiMsg),
+      }).catch(() => {})
+    } catch {}
   }, 900)
 })
 
@@ -253,17 +372,33 @@ function saveChat() {
   store.set('ss.chat', chat)
   refreshCount()
 }
-document.getElementById('clear-chat').addEventListener('click', () => {
+
+document.getElementById('clear-chat').addEventListener('click', async () => {
   const backup = chat
   chat = []
   saveChat()
   renderChat()
+
+  /* GROUND RULE 2: Relative URL DELETE fetch('/api/notes/chat') */
+  try {
+    await fetch('/api/notes/chat', { method: 'DELETE' })
+  } catch {}
+
   toast('Conversation cleared', {
     label: 'Undo',
-    run: () => {
+    run: async () => {
       chat = backup
       saveChat()
       renderChat()
+      try {
+        for (const m of backup) {
+          await fetch('/api/notes/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(m),
+          })
+        }
+      } catch {}
     },
   })
 })
@@ -280,7 +415,6 @@ suggEl.addEventListener('click', (e) => {
 })
 
 /* ---------- feedback form ---------- */
-let feedback = store.get('ss.feedback', [])
 const fbForm = document.getElementById('feedback-form')
 const fbRules = {
   rating: (f) => (!f.elements.rating.value ? 'Please choose a star rating.' : ''),
@@ -301,7 +435,7 @@ fbForm.addEventListener('change', (e) => {
   document.getElementById('fb-hint').textContent = low ? 'Required — help us understand what missed the mark.' : 'Optional — required if you rate 2 stars or fewer.'
 })
 
-fbForm.addEventListener('submit', (e) => {
+fbForm.addEventListener('submit', async (e) => {
   e.preventDefault()
   if (!validate(fbForm, fbRules)) return
   const entry = {
@@ -310,10 +444,28 @@ fbForm.addEventListener('submit', (e) => {
     tryTip: fbForm.elements.tryTip.value,
     comment: val(fbForm, 'comment'),
     lookId: latestLook?.id ?? null,
-    lookName: latestLook?.name ?? 'Elevated Casual',
+    lookName: latestLook?.name ?? currentNote?.lookName ?? 'Elevated Casual',
     at: new Date().toISOString(),
   }
-  feedback = [entry, ...feedback]
+
+  /* GROUND RULE 2: Relative URL POST fetch('/api/notes/feedback') */
+  try {
+    const res = await fetch('/api/notes/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entry),
+    })
+    if (res.ok) {
+      const saved = await res.json()
+      feedback = [saved, ...feedback]
+    } else {
+      feedback = [entry, ...feedback]
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, saved feedback locally:', err)
+    feedback = [entry, ...feedback]
+  }
+
   store.set('ss.feedback', feedback)
   refreshCount()
   fbForm.reset()
@@ -321,6 +473,7 @@ fbForm.addEventListener('submit', (e) => {
   showThanks(entry)
   toast('Feedback saved — thank you')
 })
+
 function showThanks(entry) {
   fbForm.querySelector('.fb-body').hidden = true
   fbForm.querySelector('.fb-thanks').hidden = false
@@ -356,5 +509,93 @@ const refreshCount = wireDataBar({
   },
 })
 
+/* =========================================================================
+   INITIAL DATA LOAD VIA RELATIVE URL FETCH WITH GRACEFUL FALLBACKS
+   ========================================================================= */
+async function loadNotesData() {
+  // 1. Fetch Stylist Notes with Graceful Fallback
+  try {
+    const res = await fetch('/api/notes')
+    if (res.ok) {
+      const data = await res.json()
+      // If collection is empty during someone else's demo, keep FALLBACK_NOTE!
+      if (Array.isArray(data) && data.length > 0) {
+        currentNote = data[0]
+      } else if (data && typeof data === 'object' && data.lookName) {
+        currentNote = data
+      } else {
+        console.info('Empty MongoDB notes collection received, falling back to graceful default.');
+        currentNote = FALLBACK_NOTE
+      }
+    } else {
+      currentNote = FALLBACK_NOTE
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, using graceful fallback note:', err)
+    currentNote = FALLBACK_NOTE
+  }
+  renderNote(currentNote)
+
+  // 2. Fetch Refinements State
+  try {
+    const res = await fetch('/api/notes/refinements')
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        done = data
+      } else if (data?.done && Array.isArray(data.done)) {
+        done = data.done
+      } else {
+        done = store.get('ss.refinements', [])
+      }
+    } else {
+      done = store.get('ss.refinements', [])
+    }
+  } catch {
+    done = store.get('ss.refinements', [])
+  }
+  renderRefinements()
+
+  // 3. Fetch Chat History
+  try {
+    const res = await fetch('/api/notes/chat')
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data) && data.length > 0) {
+        chat = data
+      } else {
+        chat = store.get('ss.chat', FALLBACK_CHAT)
+      }
+    } else {
+      chat = store.get('ss.chat', FALLBACK_CHAT)
+    }
+  } catch {
+    chat = store.get('ss.chat', FALLBACK_CHAT)
+  }
+  renderChat()
+
+  // 4. Fetch Feedback
+  try {
+    const res = await fetch('/api/notes/feedback')
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        feedback = data
+      } else {
+        feedback = store.get('ss.feedback', [])
+      }
+    } else {
+      feedback = store.get('ss.feedback', [])
+    }
+  } catch {
+    feedback = store.get('ss.feedback', [])
+  }
+
+  refreshCount()
+}
+
+// Initial render with fallbacks immediately, then sync with backend
+renderNote(FALLBACK_NOTE)
 renderRefinements()
 renderChat()
+loadNotesData()

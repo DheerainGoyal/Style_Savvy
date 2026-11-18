@@ -14,6 +14,7 @@ connectDB();
 const app = express();
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static('public'));
+app.use(express.static('Public'));
 
 app.use('/api/users', userRoutes);
 app.use('/api/closet', closetRoutes);
@@ -22,3 +23,5 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/profile', profileRoutes);
 
 app.listen(process.env.PORT || 3000, () => console.log('StyleSavvy running on http://localhost:3000'));
+
+export default app;
